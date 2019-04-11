@@ -12,16 +12,23 @@
 */
 #include "lottery.h"
 #include <stdio.h>
+#include <string.h>
+
+char seperator;
+FILE* stream;
 
 bool init_lottery(const char *csv_file, char csv_separator){
-    FILE* stream = fopen(csv_file, "r");
-    if(stream == 0) return false;
-    char* lines = fgets(csv_seperator, MAX_LINE_LEN, stream);
-    return true;
+    stream = fopen(csv_file, "r");
+    seperator = csv_separator;
+    return stream != 0;
 }
  
 bool get_tip(int tip_number, int tip[TIP_SIZE]){
-    return true;
+    fseek(stream, MAX_LINE_LEN * tip_number, SEEK_SET);
+    fseek(stream, UUID_LEN, SEEK_CUR);
+    char current_tip[TIP_SIZE];
+    fgets(current_tip, TIP_SIZE, stream);
+    
 }
  
 bool set_drawing(int drawing_numbers[TIP_SIZE]){

@@ -27,6 +27,8 @@ bool get_tip(int tip_number, int tip[TIP_SIZE]){
     fseek(stream, MAX_LINE_LEN * tip_number, SEEK_SET);
     fseek(stream, UUID_LEN, SEEK_CUR);
     char current_tip[TIP_SIZE];
+    fgets(current_tip, TIP_SIZE, stream);
+    return current_tip == 0;
 }
  
 bool set_drawing(int drawing_numbers[TIP_SIZE]){

@@ -13,6 +13,7 @@
 #include "lottery.h"
 #include <stdio.h>
 #include <string.h>
+#include <stdbool.h>
 
 char seperator;
 FILE* stream;
@@ -30,16 +31,14 @@ bool is_tip_number_valid(int tip_number){
     int sz=ftell(stream);           ///sz = size, tells me the position of the stream
     fseek(stream,prev,SEEK_SET); //go back to where we were
     
-    return !(tip_number < 0 || tip_number * MAX_LINE_LEN > sz); //tip_number is for example 30,
+    return tip_number >= 0 && tip_number * MAX_LINE_LEN <= sz; //tip_number is for example 30,
                                                                 // if we multiply it by the MAX_LINE_LEN,
                                                                 // we get the actual position we would get with this tip_number 
 }
 
 bool get_tip(int tip_number, int tip[TIP_SIZE]){
-    
-    if(!is_tip_number_valid(tip_number)) return false;
-   
-    return true;
+    bool t = is_tip_number_valid(tip_number);
+    return t;
 }
  
 bool set_drawing(int drawing_numbers[TIP_SIZE]){

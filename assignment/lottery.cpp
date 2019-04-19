@@ -22,29 +22,23 @@ bool init_lottery(const char *csv_file, char csv_separator){
     seperator = csv_separator;
     return stream != 0;
 }
- 
+
+bool is_tip_number_valid(int tip_number){
+    //find out file size
+    int prev=ftell(stream);         ///previous position
+    fseek(stream, 0L, SEEK_END);    ///End of file
+    int sz=ftell(stream);           ///sz = size, tells me the position of the stream
+    fseek(stream,prev,SEEK_SET); //go back to where we were
+    
+    return !(tip_number < 0 || tip_number * MAX_LINE_LEN > sz); //tip_number is for example 30,
+                                                                // if we multiply it by the MAX_LINE_LEN,
+                                                                // we get the actual position we would get with this tip_number 
+}
+
 bool get_tip(int tip_number, int tip[TIP_SIZE]){
     
-    if(tip_number < 0) return false;
-    fseek(stream, MAX_LINE_LEN * tip_number, SEEK_SET);
-    if(stream == 0) return false;
-    fseek(stream, UUID_LEN, SEEK_CUR);
-    if(stream == 0) return false;
-    char current_tip[TIP_SIZE];
-    fgets(current_tip, TIP_SIZE, stream);
-    if(current_tip == 0) return false;
-    const char sep[2] = {seperator, '\0'}; //seperator 
-    char *token;
-    token = strtok(current_tip, sep); //get the pointer to the first token
-    if(token == 0) return false;
-
-    char current_strings[TIP_SIZE];
-    while(token != NULL)
-    {
-        if(token == 0) return false;
-        current_strings[0] = *token;
-        token = strtok(NULL, sep);
-    }
+    if(!is_tip_number_valid(tip_number)) return false;
+   
     return true;
 }
  

@@ -53,8 +53,15 @@ bool get_tip(int tip_number, int tip[TIP_SIZE]){
             fseek(stream, MAX_LINE_LEN * tip_number, SEEK_SET);
             fseek(stream, UUID_LEN, SEEK_CUR);
             
+            char temp[MAX_TIP_LEN + 1];
+            fgets(temp, MAX_TIP_LEN, stream);
             char tip_string[MAX_TIP_LEN];
-            fgets(tip_string, MAX_TIP_LEN, stream);
+            for(int i = 1; i <= MAX_TIP_LEN; i++)
+            {
+                tip_string[i-1] = temp[i];
+            }
+            
+
 
             char *tkn; 
             char sep[] = { seperator };

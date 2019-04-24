@@ -3,11 +3,6 @@
 #include <string.h>
 #include "lottery.h"
 
-#define 	UUID_LEN       36
-#define 	MAX_TIP_LEN    17
-
-//Unused?
-#define 	MAX_LINE_LEN   (UUID_LEN + 1 + MAX_TIP_LEN)
 
 int get_file_length(FILE* fd);
 int get_line_length(FILE* fd, int line_index);

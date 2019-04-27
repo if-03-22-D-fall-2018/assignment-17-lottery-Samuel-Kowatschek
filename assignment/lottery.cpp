@@ -17,8 +17,6 @@
 
 #define 	UUID_LEN       40
 #define 	MAX_TIP_LEN    17
-
-//Unused?
 #define 	MAX_LINE_LEN   (UUID_LEN + 1 + MAX_TIP_LEN)
 
 FILE* fd;

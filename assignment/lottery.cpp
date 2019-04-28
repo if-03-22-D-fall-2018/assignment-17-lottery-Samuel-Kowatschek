@@ -19,7 +19,7 @@
 #define 	MAX_TIP_LEN    17
 #define 	MAX_LINE_LEN   (UUID_LEN + 1 + MAX_TIP_LEN)
 
-FILE* fd;
+FILE* stream;
 char seperator;
 int last_drawing[TIP_SIZE];
 bool is_set;
@@ -27,20 +27,20 @@ bool is_set;
 bool init_lottery(const char *csv_file, char csv_separator)
 {
     seperator = csv_separator;
-    fd = fopen(csv_file, "r");
+    stream = fopen(csv_file, "r");
     for (int i = 0; i < TIP_SIZE; i++)
         last_drawing[i] = 0;
     is_set = false;
-    return fd != 0;
+    return stream != 0;
 }
 
 int number_of_lines(FILE* stream){
-    int previousPos = ftell(fd);
-    fseek(fd, 0, SEEK_SET);
+    int previousPos = ftell(stream);
+    fseek(stream, 0, SEEK_SET);
     int lines = 1;
-    while (!feof(fd))
-        if (fgetc(fd) == '\n') lines++;
-    fseek(fd, previousPos, SEEK_SET);
+    while (!feof(stream))
+        if (fgetc(stream) == '\n') lines++;
+    fseek(stream, previousPos, SEEK_SET);
     return lines;
 }
 
@@ -63,14 +63,14 @@ int char_to_int(char* chars, int count){
 
 bool get_tip(int tip_number, int tip[TIP_SIZE])
 {
-    if (tip_number < 0 || tip_number >= number_of_lines(fd))
+    if (tip_number < 0 || tip_number >= number_of_lines(stream))
         return false;
     
-    rewind(fd);
+    rewind(stream);
     char line[MAX_LINE_LEN];
     for(int i = 0; i <= tip_number; i++)
     {
-        if(fgets(line, MAX_LINE_LEN, fd) == 0){
+        if(fgets(line, MAX_LINE_LEN, stream) == 0){
             return false;
         }
     }
@@ -121,7 +121,7 @@ bool contains_tip(int* tip, int tipDigit) {
 }
 
 int get_tip_result(int tip_number){
-    if(tip_number < 0 || tip_number >= number_of_lines(fd)) return -2;
+    if(tip_number < 0 || tip_number >= number_of_lines(stream)) return -2;
     int current_tip[TIP_SIZE];
     get_tip(tip_number, current_tip);
     if(last_drawing[0] == 0 ) return -1;
@@ -140,7 +140,7 @@ int get_right_tips_count(int right_digits_count){
         return -1;
     }
     int temp = 0, count = 0;
-    for (int i = 0; i < number_of_lines(fd); ++i) {
+    for (int i = 0; i < number_of_lines(stream); ++i) {
         temp = get_tip_result(i);
         if (temp == right_digits_count){
             count++;
